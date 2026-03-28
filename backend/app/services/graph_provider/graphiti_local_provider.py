@@ -80,7 +80,9 @@ class GraphitiLocalGraphProvider(BaseGraphProvider):
     """Graphiti + Neo4j backed graph provider."""
 
     _initialized = False
-    _init_lock = threading.Lock()
+    # Startup can flow through ensure_initialized() -> _ensure_client_ready(), so this
+    # lock must be re-entrant to avoid self-deadlocking during app bootstrap.
+    _init_lock = threading.RLock()
 
     def __init__(self):
         try:
