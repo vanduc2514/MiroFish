@@ -14,10 +14,13 @@ dependencies = [
     "flask-cors>=6.0.0",
     
     # LLM support
-    "openai>=1.0.0",
+    "openai>=1.91.0",
     
-    # Zep Cloud
+    # Graph backends
     "zep-cloud==3.13.0",
+    "numpy>=1.0.0",
+    "posthog>=3.0.0",
+    "tenacity>=9.0.0",
     
     # OASIS social media simulation
     "camel-oasis==0.2.5",

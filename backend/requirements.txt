@@ -11,10 +11,16 @@ flask-cors>=6.0.0
 
 # ============= LLM Support =============
 # OpenAI SDK (all LLM calls use the OpenAI-compatible format)
-openai>=1.0.0
+openai>=1.91.0
 
-# ============= Zep Cloud =============
+# ============= Graph Backends =============
 zep-cloud==3.13.0
+# Local Graphiti support is installed separately with:
+#   uv pip install --python .venv/bin/python --no-deps graphiti-core==0.28.2
+# This avoids conflicting Neo4j driver pins between Graphiti and camel-oasis.
+numpy>=1.0.0
+posthog>=3.0.0
+tenacity>=9.0.0
 
 # ============= OASIS Social Media Simulation =============
 # OASIS social simulation framework
