@@ -15,7 +15,7 @@ from app.services.oasis_profile_generator import OasisProfileGenerator, OasisAge
 def test_profile_formats():
     """Test Profile Formats."""
     print("=" * 60)
-    print("OASIS Profile格式测试")
+    print("OASIS Profile Format Test")
     print("=" * 60)
     
     
@@ -64,7 +64,7 @@ def test_profile_formats():
         reddit_path = os.path.join(temp_dir, "reddit_profiles.json")
         
         
-        print("\n1. 测试Twitter Profile (CSV格式)")
+        print("\n1. Test Twitter Profile (CSV format)")
         print("-" * 40)
         generator._save_twitter_csv(test_profiles, twitter_path)
         
@@ -73,10 +73,10 @@ def test_profile_formats():
             reader = csv.DictReader(f)
             rows = list(reader)
             
-        print(f"   文件: {twitter_path}")
-        print(f"   行数: {len(rows)}")
-        print(f"   表头: {list(rows[0].keys())}")
-        print(f"\n   示例数据 (第1行):")
+        print(f"   File: {twitter_path}")
+        print(f"   Row count: {len(rows)}")
+        print(f"   Headers: {list(rows[0].keys())}")
+        print(f"\n   Sample data (first row):")
         for key, value in rows[0].items():
             print(f"     {key}: {value}")
         
@@ -85,12 +85,12 @@ def test_profile_formats():
                                    'friend_count', 'follower_count', 'statuses_count', 'created_at']
         missing = set(required_twitter_fields) - set(rows[0].keys())
         if missing:
-            print(f"\n   [错误] 缺少字段: {missing}")
+            print(f"\n   [Error] Missing fields: {missing}")
         else:
-            print(f"\n   [通过] 所有必需字段都存在")
+            print(f"\n   [Pass] All required fields are present")
         
         
-        print("\n2. 测试Reddit Profile (JSON详细格式)")
+        print("\n2. Test Reddit Profile (detailed JSON format)")
         print("-" * 40)
         generator._save_reddit_json(test_profiles, reddit_path)
         
@@ -98,10 +98,10 @@ def test_profile_formats():
         with open(reddit_path, 'r', encoding='utf-8') as f:
             reddit_data = json.load(f)
         
-        print(f"   文件: {reddit_path}")
-        print(f"   条目数: {len(reddit_data)}")
-        print(f"   字段: {list(reddit_data[0].keys())}")
-        print(f"\n   示例数据 (第1条):")
+        print(f"   File: {reddit_path}")
+        print(f"   Item count: {len(reddit_data)}")
+        print(f"   Fields: {list(reddit_data[0].keys())}")
+        print(f"\n   Sample data (first item):")
         print(json.dumps(reddit_data[0], ensure_ascii=False, indent=4))
         
         
@@ -110,32 +110,32 @@ def test_profile_formats():
         
         missing = set(required_reddit_fields) - set(reddit_data[0].keys())
         if missing:
-            print(f"\n   [错误] 缺少必需字段: {missing}")
+            print(f"\n   [Error] Missing required fields: {missing}")
         else:
-            print(f"\n   [通过] 所有必需字段都存在")
+            print(f"\n   [Pass] All required fields are present")
         
         present_optional = set(optional_reddit_fields) & set(reddit_data[0].keys())
-        print(f"   [信息] 可选字段: {present_optional}")
+        print(f"   [Info] Optional fields present: {present_optional}")
     
     print("\n" + "=" * 60)
-    print("测试完成!")
+    print("Test complete!")
     print("=" * 60)
 
 
 def show_expected_formats():
     """Show Expected Formats."""
     print("\n" + "=" * 60)
-    print("OASIS 期望的Profile格式参考")
+    print("Reference: expected OASIS profile formats")
     print("=" * 60)
     
-    print("\n1. Twitter Profile (CSV格式)")
+    print("\n1. Twitter Profile (CSV format)")
     print("-" * 40)
     twitter_example = """user_id,user_name,name,bio,friend_count,follower_count,statuses_count,created_at
 0,user0,User Zero,I am user zero with interests in technology.,100,150,500,2023-01-01
 1,user1,User One,Tech enthusiast and coffee lover.,200,250,1000,2023-01-02"""
     print(twitter_example)
     
-    print("\n2. Reddit Profile (JSON详细格式)")
+    print("\n2. Reddit Profile (detailed JSON format)")
     print("-" * 40)
     reddit_example = [
         {
@@ -157,5 +157,4 @@ def show_expected_formats():
 if __name__ == "__main__":
     test_profile_formats()
     show_expected_formats()
-
 
