@@ -1294,8 +1294,8 @@ class ReportAgent:
                 logger.warning(t('report.sectionIterNone', title=section.title, iteration=iteration + 1))
                 # 如果还有迭代次数，添加消息并重试
                 if iteration < max_iterations - 1:
-                    messages.append({"role": "assistant", "content": "（响应为空）"})
-                    messages.append({"role": "user", "content": "请继续生成内容。"})
+                    messages.append({"role": "assistant", "content": "(empty response)"})
+                    messages.append({"role": "user", "content": "Please continue generating the content."})
                     continue
                 # 最后一次迭代也返回 None，跳出循环进入强制收尾
                 break
@@ -1320,11 +1320,11 @@ class ReportAgent:
                     messages.append({
                         "role": "user",
                         "content": (
-                            "【格式错误】你在一次回复中同时包含了工具调用和 Final Answer，这是不允许的。\n"
-                            "每次回复只能做以下两件事之一：\n"
-                            "- 调用一个工具（输出一个 <tool_call> 块，不要写 Final Answer）\n"
-                            "- 输出最终内容（以 'Final Answer:' 开头，不要包含 <tool_call>）\n"
-                            "请重新回复，只做其中一件事。"
+                            "[Format Error] Your response included both a tool call and a Final Answer, which is not allowed.\n"
+                            "Each response must do exactly one of the following:\n"
+                            "- Call one tool (output one <tool_call> block, without Final Answer)\n"
+                            "- Output final content (start with 'Final Answer:', without any <tool_call>)\n"
+                            "Please respond again and do only one."
                         ),
                     })
                     continue

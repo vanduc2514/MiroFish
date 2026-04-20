@@ -1683,7 +1683,11 @@ class ZepToolsService:
         for interview in interviews:
             interview_texts.append(f"【{interview.agent_name}（{interview.agent_role}）】\n{interview.response[:500]}")
         
-        quote_instruction = 'Use quotation marks "" when quoting interviewees'
+        quote_instruction = (
+            "Quote interviewees with Chinese quotes 「」"
+            if get_locale() == 'zh'
+            else 'Use quotation marks "" when quoting interviewees'
+        )
         system_prompt = f"""You are a professional news editor. Generate an interview summary from multiple interviewee responses.
 
     Summary requirements:

@@ -540,7 +540,7 @@ class SimulationConfigGenerator:
         # 计算最大允许值（80%的agent数）
         max_agents_allowed = max(1, int(num_entities * 0.9))
         
-                prompt = f"""Generate a time-simulation configuration based on the requirement below.
+        prompt = f"""Generate a time-simulation configuration based on the requirement below.
 
 {context_truncated}
 
@@ -561,7 +561,7 @@ Generate a time configuration JSON.
 
 ### Return JSON only (no markdown)
 
-示例：
+Example:
 {{
     "total_simulation_hours": 72,
     "minutes_per_round": 60,
@@ -988,4 +988,3 @@ Return JSON only (no markdown):
                 "influence_weight": 1.0
             }
     
-
