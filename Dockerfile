@@ -1,8 +1,11 @@
-FROM python:3.11
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+  PYTHONUNBUFFERED=1
 
 # 安装 Node.js （满足 >=18）及必要工具
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends nodejs npm \
+  && apt-get install -y --no-install-recommends nodejs npm ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 
 # 从 uv 官方镜像复制 uv
@@ -18,8 +21,10 @@ COPY backend/pyproject.toml backend/uv.lock ./backend/
 # 安装依赖（Node + Python）
 RUN npm ci \
   && npm ci --prefix frontend \
-  && cd backend && uv sync --frozen \
-  && uv pip install --python .venv/bin/python --no-deps graphiti-core==0.28.2
+  && cd backend && uv sync --frozen --no-dev \
+  && uv pip install --python .venv/bin/python --no-deps graphiti-core==0.28.2 \
+  && npm cache clean --force \
+  && rm -rf /root/.cache /tmp/*
 
 # 复制项目源码
 COPY . .
