@@ -16,11 +16,11 @@ from dataclasses import dataclass, field
 from datetime import datetime
 
 from openai import OpenAI
-from zep_cloud.client import Zep
 
 from ..config import Config
 from ..utils.logger import get_logger
 from ..utils.locale import get_language_instruction, get_locale, set_locale, t
+from .graph_provider import create_graph_provider
 from .zep_entity_reader import EntityNode, ZepEntityReader
 
 logger = get_logger('mirofish.oasis_profile')
@@ -198,16 +198,9 @@ class OasisProfileGenerator:
             base_url=self.base_url
         )
         
-        # Zep客户端用于检索丰富上下文
         self.zep_api_key = zep_api_key or Config.ZEP_API_KEY
-        self.zep_client = None
+        self.graph_provider = create_graph_provider()
         self.graph_id = graph_id
-        
-        if self.zep_api_key:
-            try:
-                self.zep_client = Zep(api_key=self.zep_api_key)
-            except Exception as e:
-                logger.warning(f"Zep客户端初始化失败: {e}")
     
     def generate_profile_from_entity(
         self, 
@@ -298,9 +291,6 @@ class OasisProfileGenerator:
         """
         import concurrent.futures
         
-        if not self.zep_client:
-            return {"facts": [], "node_summaries": [], "context": ""}
-        
         entity_name = entity.name
         
         results = {
@@ -324,7 +314,7 @@ class OasisProfileGenerator:
             
             for attempt in range(max_retries):
                 try:
-                    return self.zep_client.graph.search(
+                    return self.graph_provider.search(
                         query=comprehensive_query,
                         graph_id=self.graph_id,
                         limit=30,
@@ -349,7 +339,7 @@ class OasisProfileGenerator:
             
             for attempt in range(max_retries):
                 try:
-                    return self.zep_client.graph.search(
+                    return self.graph_provider.search(
                         query=comprehensive_query,
                         graph_id=self.graph_id,
                         limit=20,
@@ -378,19 +368,19 @@ class OasisProfileGenerator:
             
             # 处理边搜索结果
             all_facts = set()
-            if edge_result and hasattr(edge_result, 'edges') and edge_result.edges:
+            if edge_result and edge_result.edges:
                 for edge in edge_result.edges:
-                    if hasattr(edge, 'fact') and edge.fact:
+                    if edge.fact:
                         all_facts.add(edge.fact)
             results["facts"] = list(all_facts)
             
             # 处理节点搜索结果
             all_summaries = set()
-            if node_result and hasattr(node_result, 'nodes') and node_result.nodes:
+            if node_result and node_result.nodes:
                 for node in node_result.nodes:
-                    if hasattr(node, 'summary') and node.summary:
+                    if node.summary:
                         all_summaries.add(node.summary)
-                    if hasattr(node, 'name') and node.name and node.name != entity_name:
+                    if node.name and node.name != entity_name:
                         all_summaries.add(f"相关实体: {node.name}")
             results["node_summaries"] = list(all_summaries)
             
@@ -1202,4 +1192,3 @@ class OasisProfileGenerator:
         """[已废弃] 请使用 save_profiles() 方法"""
         logger.warning("save_profiles_to_json已废弃，请使用save_profiles方法")
         self.save_profiles(profiles, file_path, platform)
-
