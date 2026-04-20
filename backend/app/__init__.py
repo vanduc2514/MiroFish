@@ -13,6 +13,7 @@ from flask import Flask, request
 from flask_cors import CORS
 
 from .config import Config
+from .services.graph_provider import initialize_selected_graph_backend
 from .utils.logger import setup_logger, get_logger
 
 
@@ -41,6 +42,11 @@ def create_app(config_class=Config):
     
     # 启用CORS
     CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+    # 初始化选中的图谱后端
+    initialize_selected_graph_backend()
+    if should_log_startup:
+        logger.info(f"图谱后端已初始化: {Config.GRAPH_BACKEND}")
     
     # 注册模拟进程清理函数（确保服务器关闭时终止所有模拟进程）
     from .services.simulation_runner import SimulationRunner
@@ -71,10 +77,13 @@ def create_app(config_class=Config):
     # 健康检查
     @app.route('/health')
     def health():
-        return {'status': 'ok', 'service': 'MiroFish Backend'}
+        return {
+            'status': 'ok',
+            'service': 'MiroFish Backend',
+            'graph_backend': Config.GRAPH_BACKEND,
+        }
     
     if should_log_startup:
         logger.info("MiroFish Backend 启动完成")
     
     return app
-
