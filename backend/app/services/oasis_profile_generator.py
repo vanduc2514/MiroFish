@@ -22,8 +22,6 @@ from ..utils.logger import get_logger
 from ..utils.locale import get_language_instruction, get_locale, set_locale, t
 from .graph_provider import create_graph_provider
 from .zep_entity_reader import EntityNode, ZepEntityReader
-from .simulation_output_postprocessor import SimulationOutputPostProcessor
-
 logger = get_logger('mirofish.oasis_profile')
 
 
@@ -848,7 +846,6 @@ class OasisProfileGenerator:
         parallel_count: int = 5,
         realtime_output_path: Optional[str] = None,
         output_platform: str = "reddit",
-        post_process: bool = True,
     ) -> List[OasisAgentProfile]:
         """
         批量从实体生成Agent Profile（支持并行生成）
@@ -861,7 +858,6 @@ class OasisProfileGenerator:
             parallel_count: 并行生成数量，默认5
             realtime_output_path: 实时写入的文件路径（如果提供，每生成一个就写入一次）
             output_platform: 输出平台格式 ("reddit" 或 "twitter")
-            post_process: 是否在生成后对文本字段进行语言后处理（翻译到当前locale）
             
         Returns:
             Agent Profile列表
@@ -1003,24 +999,6 @@ class OasisProfileGenerator:
         print(f"\n{'='*60}")
         print(f"人设生成完成！共生成 {len([p for p in profiles if p])} 个Agent")
         print(f"{'='*60}\n")
-
-        # Post-process: translate text fields to the current locale
-        if post_process:
-            try:
-                processor = SimulationOutputPostProcessor()
-                profile_dicts = [p.to_dict() for p in profiles if p is not None]
-                translated_dicts = processor.translate_profiles(profile_dicts)
-                # Merge translated text fields back into the OasisAgentProfile objects
-                for profile, translated in zip(
-                    (p for p in profiles if p is not None), translated_dicts
-                ):
-                    for field in ("bio", "persona", "profession"):
-                        if field in translated:
-                            setattr(profile, field, translated[field])
-                    if "interested_topics" in translated:
-                        profile.interested_topics = translated["interested_topics"]
-            except Exception as _pp_exc:
-                logger.warning(f"Post-processor failed, keeping original profiles: {_pp_exc}")
 
         return profiles
     

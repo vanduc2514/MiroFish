@@ -111,8 +111,18 @@ Organizations: University, Company, GovernmentAgency, MediaOutlet, Hospital, Sch
 
 ## Reference Edge Ideas
 
-WORKS_FOR, STUDIES_AT, AFFILIATED_WITH, REPRESENTS, REGULATES, REPORTS_ON,
-COMMENTS_ON, RESPONDS_TO, SUPPORTS, OPPOSES, COLLABORATES_WITH, COMPETES_WITH.
+- WORKS_FOR: works for / employed by
+- STUDIES_AT: studies at
+- AFFILIATED_WITH: affiliated with / belongs to
+- REPRESENTS: represents
+- REGULATES: regulates / oversees
+- REPORTS_ON: reports on / covers
+- COMMENTS_ON: comments on / replies to
+- RESPONDS_TO: responds to / reacts to
+- SUPPORTS: supports / endorses
+- OPPOSES: opposes / criticizes
+- COLLABORATES_WITH: collaborates with
+- COMPETES_WITH: competes with
 """
 
 

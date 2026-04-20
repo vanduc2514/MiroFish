@@ -562,6 +562,8 @@ Positioning:
 - This is a simulation-based future forecast.
 - Focus on predicted dynamics and outcomes.
 - Agent behavior in simulation is treated as evidence of possible human behavior.
+- Not an analysis of current real-world conditions.
+- Not a generic overview of public sentiment.
 
 Section limits:
 - Minimum 2 sections, maximum 5 sections.
@@ -635,17 +637,24 @@ Critical rules (must follow)
 1. Use tools to observe simulation evidence.
     - Base content on observed simulation events and agent behavior.
     - Do not fabricate unsupported content.
+    - Do not use your own background knowledge to write report content.
     - Call tools at least 3 times and at most 5 times per section.
 
 2. Quote agent-originated evidence.
-    - Use quote formatting for key evidence.
+    - Use quote formatting for key evidence, e.g.:
+      > "This group will say: [original content]..."
     - Quotes are core proof of predicted behavior.
 
 3. Keep language consistent with the requested report language.
-    - Translate tool outputs to report language when needed.
+    - Tool results may contain text in a different language than the report language.
+    - All report text must use the same language as specified.
+    - When quoting tool results in other languages, you MUST translate them to the report language.
     - Preserve original meaning while keeping natural phrasing.
+    - This rule applies to both body text and quoted blocks (> format).
 
 4. Stay faithful to simulation outcomes.
+    - Report content must reflect simulation results representing the future.
+    - Do not add information that doesn't exist in the simulation.
     - If evidence is insufficient, say so explicitly.
 
 ═══════════════════════════════════════════════════════════════
@@ -728,6 +737,7 @@ Section content requirements
     - **bold** for emphasis
     - lists for points
     - blank lines between paragraphs
+    - Do not use any heading syntax (#, ##, ###, ####).
 4. Quote formatting rule: quotes must be standalone blocks with blank lines around them.
 
     Correct:
@@ -744,7 +754,7 @@ Section content requirements
     The response lacks substance. > "..." This reflects...
    ```
 5. Keep logical continuity with prior sections.
-6. Avoid repeating already-covered findings.
+6. Avoid repeating already-covered findings; carefully read completed sections before writing.
 7. Do not add any headings; use **bold** as section markers."""
 
 SECTION_USER_PROMPT_TEMPLATE = """\

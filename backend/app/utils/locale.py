@@ -48,6 +48,9 @@ def _normalize_locale(locale: str) -> str:
     if base in _LOCALE_ALIASES:
         return _LOCALE_ALIASES[base]
 
+    if base in _languages or base in _translations:
+        return base
+
     return token
 
 

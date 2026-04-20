@@ -21,6 +21,7 @@ const normalizeLocale = (value) => {
   if (localeAliases[token]) return localeAliases[token]
   const base = token.split('-')[0]
   if (localeAliases[base]) return localeAliases[base]
+  if (languages[base]) return base
   return token
 }
 
