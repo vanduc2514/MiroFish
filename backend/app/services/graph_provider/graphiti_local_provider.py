@@ -551,7 +551,11 @@ class GraphitiLocalGraphProvider(BaseGraphProvider):
             attrs: dict[str, Any] = {"__doc__": description}
             annotations: dict[str, Any] = {}
             for attr_def in entity_def.get("attributes", []):
-                attr_name = safe_attr_name(attr_def["name"])
+                raw_name = attr_def.get("name")
+                if not raw_name:
+                    logger.warning("Skipping entity attribute without name key: %s", str(attr_def)[:120])
+                    continue
+                attr_name = safe_attr_name(raw_name)
                 attr_desc = attr_def.get("description", attr_name)
                 attrs[attr_name] = Field(default=None, description=attr_desc)
                 annotations[attr_name] = Optional[str]
@@ -568,7 +572,11 @@ class GraphitiLocalGraphProvider(BaseGraphProvider):
             attrs = {"__doc__": description}
             annotations = {}
             for attr_def in edge_def.get("attributes", []):
-                attr_name = safe_attr_name(attr_def["name"])
+                raw_name = attr_def.get("name")
+                if not raw_name:
+                    logger.warning("Skipping edge attribute without name key: %s", str(attr_def)[:120])
+                    continue
+                attr_name = safe_attr_name(raw_name)
                 attr_desc = attr_def.get("description", attr_name)
                 attrs[attr_name] = Field(default=None, description=attr_desc)
                 annotations[attr_name] = Optional[str]
